@@ -26,12 +26,12 @@ const index = () => {
   return (
     <View style={{padding:10,flex:1,backgroundColor:"white"}}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        <Image
-          style={{ width: 60, height: 60, borderRadius: 30 }}
-          source={{
-            uri: "https://lh3.googleusercontent.com/ogw/ANLem4Zmk7fohWyH7kB6YArqFy0WMfXnFtuX3PX3LSBf=s64-c-mo",
-          }}
-        />
+        // <Image
+        //   style={{ width: 60, height: 60, borderRadius: 30 }}
+        //   source={{
+        //     uri: "https://lh3.googleusercontent.com/ogw/ANLem4Zmk7fohWyH7kB6YArqFy0WMfXnFtuX3PX3LSBf=s64-c-mo",
+        //   }}
+        // />
         <View>
           <Text style={{ fontSize: 16, fontWeight: "600" }}>This is your Profile</Text>
           <Text style={{ fontSize: 15, color: "gray", marginTop: 4 }}>Detail</Text>
