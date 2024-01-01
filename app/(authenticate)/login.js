@@ -4,8 +4,8 @@ import {
   View,
   SafeAreaView,
   KeyboardAvoidingView,
-  Pressable,
   TextInput,
+  Pressable,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -15,33 +15,34 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken");
         if (token) {
-          router.replace("/(tabs)/home")
+          router.replace("/(tabs)/home");
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     };
     checkLoginStatus();
-  },[])
-    const handleLogin = () => {
+  }, []);
+  const handleLogin = () => {
     const user = {
       email: email,
       password: password,
     };
 
-    axios.post("http://192.168.246.118:3000/login", user).then((response) => {
-      const token = response.data.token;
-      AsyncStorage.setItem("authToken", token);
-      router.replace("/(tabs)/home")
-    })
+      axios.post('http://192.168.246.118:3000/login', user).then((response) => {
+        const token = response.data.token;
+        console.log("token", token)
+        AsyncStorage.setItem("authToken", token);
+        router.replace("/(tabs)/home");
+      });
   };
   return (
     <SafeAreaView
