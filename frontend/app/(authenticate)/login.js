@@ -37,12 +37,17 @@ const login = () => {
       password: password,
     };
 
-      axios.post('http://192.168.246.118:3000/login', user).then((response) => {
+    axios.post('http://192.168.1.13:3000/login', user)
+      .then((response) => {
         const token = response.data.token;
         console.log("token", token)
         AsyncStorage.setItem("authToken", token);
         router.replace("/(tabs)/home");
+      })
+      .catch((error) => {
+        console.log("error", error);
       });
+
   };
   return (
     <SafeAreaView
@@ -161,7 +166,7 @@ const login = () => {
             </Text>
           </Pressable>
 
-            <Pressable onPress={()=> router.replace("/register") } style={{ marginTop: 15 }}>
+          <Pressable onPress={() => router.replace("/register")} style={{ marginTop: 15 }}>
             <Text style={{ textAlign: "center", fontSize: 15, color: "gray" }}>
               Don't have an account? Sign Up
             </Text>
