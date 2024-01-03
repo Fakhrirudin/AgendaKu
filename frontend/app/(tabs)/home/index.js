@@ -20,6 +20,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import axios from "axios";
 import moment from "moment";
 import { useRouter } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const index = () => {
     const router = useRouter();
@@ -58,58 +59,58 @@ const index = () => {
         },
     ];
     const addTodo = async () => {
-        try {
-            const todoData = {
-                title: todo,
-                category: category,
-            }
-
-            axios.post("http://192.168.246.118:3000/todos/659125ece6c1e5639199aa95", todoData)
-                .then((response) => {
-                    console.log(response)
-                }).catch((error) => {
-                    console.log("error", error)
-                });
-            await getUserTodos();
-            setModalVisible(false);
-            setTodo("");
-        } catch (error) {
-            console.log("error", error)
+    try {
+        const userId = await AsyncStorage.getItem("UserId");
+        const todoData = {
+            title: todo,
+            category: category,
         }
+        if (!userId) {
+        console.error("UserId is not available.");
+        return;
+        }
+
+        const response = await axios.post(`http://192.168.100.20:3000/todos/${userId}`, todoData);
+
+        console.log("Todo added successfully:", response.data);
+
+        await getUserTodos();
+
+        setModalVisible(false);
+        setTodo("");
+    } catch (error) {
+        console.error("Error adding todo:", error);
+    }
     };
+
     useEffect(() => {
         getUserTodos();
     }, [marked, isModalVisible]);
     const getUserTodos = async () => {
         try {
-            const response = await axios.get(
-                'http://192.168.246.118:3000/users/659125ece6c1e5639199aa95/todos'
-            );
+            const userId = await AsyncStorage.getItem("UserId")
+        const response = await axios.get(`https://agendaku-api.vercel.app/users/${userId}/todos`);
 
-            console.log(response.data.todos);
-            setTodos(response.data.todos);
+        console.log(response.data.todos);
+        setTodos(response.data.todos);
 
-            const fetchedTodos = response.data.todos || [];
-            const pending = fetchedTodos.filter(
-                (todo) => todo.status !== "completed"
-            );
-            const completed = fetchedTodos.filter(
-                (todo) => todo.status === "completed"
-            );
-            
-            setPendingTodos (pending) ;
-            setCompletedTodos(completed)
+        const fetchedTodos = response.data.todos || [];
+        const pending = fetchedTodos.filter((todo) => todo.status !== "completed");
+        const completed = fetchedTodos.filter((todo) => todo.status === "completed");
+
+        setPendingTodos(pending);
+        setCompletedTodos(completed);
         } catch (error) {
-            console.log("error", error);
+        console.log("error", error);
         }
     };
     const markTodoAsCompleted = async (todoId) => {
         try {
-            setMarked(true);
-            const response = await axios.patch(`http://192.168.246.118:3000/todos/${todoId}/complete`);
-            console.log(response.data)
+        setMarked(true);
+        const response = await axios.patch(`http://192.168.100.20:3000/todos/${todoId}/complete`);
+        console.log(response.data);
         } catch (error) {
-            console.log("error", error)
+        console.log("error", error);
         }
     };
     console.log("completed", completedTodos);

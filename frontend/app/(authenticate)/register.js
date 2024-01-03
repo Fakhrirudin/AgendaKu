@@ -26,7 +26,7 @@ import axios from "axios";
             email: email,
             password: password,
         };
-            axios.post('http://192.168.246.118:3000/register', user).then((response) => {
+            axios.post('https://agendaku-api.vercel.app/register', user).then((response) => {
                 console.log(response);
                 Alert.alert("Registration Successful", "You have been registered successfully");
                 setName("");

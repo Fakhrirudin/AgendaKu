@@ -74,8 +74,8 @@ app.post("/login", async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user._id }, secretKey);
-
-        res.status(200).json({ token });
+        res.status(200).json({ token:token, userId: user._id });
+        
     } catch (error) {
         console.log("Login Failed", error);
         res.status(500).json({ message: "Login Failed" })
@@ -112,6 +112,7 @@ app.post("/todos/:userId", async (req, res) => {
 app.get("/users/:userId/todos", async (req, res) => {
     try {
         const userId = req.params.userId;
+        console.log("id : ", userId);
 
         const user = await User.findById(userId).populate("todos");
         if (!user) {
@@ -122,8 +123,6 @@ app.get("/users/:userId/todos", async (req, res) => {
         res.status(500).json({ error: "Something went wrong" });
     }
 });
-
-
 
 app.patch("/todos/:todoId/complete", async (req, res) => {
     try {
@@ -147,36 +146,41 @@ app.patch("/todos/:todoId/complete", async (req, res) => {
     }
 });
 
-app.get("/todos/completed/:date", async (req, res) => {
-    try {
-        const date = req.params.date;
+// app.get("/todos/completed/:date/:userId", async (req, res) => {
+//         try {
+//         const date = req.params.date;
+//         const userId = req.params.userId;
+    
+//         const user = await User.findById(userId).populate({
+//             path: "todos",
+//             match: {
+//                 status: "completed", createdAt: {
+//                     $gte: new Date(`${ date }T00:00:00.000Z`),
+//                     $lt: new Date(`${ date }T23: 59: 59.999Z`)
+//                 }
+//             },
+//         });
+    
+//         const completedTodos = user.todos;
+    
+//         res.status(200).json({ completedTodos });
+//         } catch (error) {
+//         res.status(500).json({ error: "Something went wrong" });
+//         }
+//     });
 
-        const completedTodos = await Todo.find({
-            status: "completed",
-            createdAt: {
-                $gte: new Date(`${date}T00:00:00.000Z`),
-                $lt: new Date(`${date}T23:59:59.999Z`),
-            },
-        }).exec();
+// app.get("/todos/count", async (req, res) => {
+//     try {
+//         const totalCompletedTodos = await Todo.countDocuments({
+//             status: "completed",
+//         }).exec();
 
-        res.status(200).json({ completedTodos });
-    } catch (error) {
-        res.status(500).json({ error: "Something went wrong" });
-    }
-});
+//         const totalPendingTodos = await Todo.countDocuments({
+//             status: "pending",
+//         }).exec();
 
-app.get("/todos/count", async (req, res) => {
-    try {
-        const totalCompletedTodos = await Todo.countDocuments({
-            status: "completed",
-        }).exec();
-
-        const totalPendingTodos = await Todo.countDocuments({
-            status: "pending",
-        }).exec();
-
-        res.status(200).json({ totalCompletedTodos, totalPendingTodos });
-    } catch (error) {
-        res.status(500).json({ error: "Network Error" });
-    }
-});
+//         res.status(200).json({ totalCompletedTodos, totalPendingTodos });
+//     } catch (error) {
+//         res.status(500).json({ error: "Network Error" });
+//     }
+// });

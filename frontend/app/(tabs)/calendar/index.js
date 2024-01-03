@@ -3,34 +3,39 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Calendar } from 'react-native-calendars';
 import axios from 'axios';
-import { FontAwesome,Feather, MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, Feather, MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const index = () => {
   const today = moment().format("YYYY-MM-DD");
   const [selectedDate, setSelectedDate] = useState(today);
   const [todos, setTodos] = useState([]);
-  const fetchCompletedTodos = async () => {
-    try {
-      const response = await axios.get(`http://192.168.246.118:3000/todos/completed/${selectedDate}`);
+  // const fetchCompletedTodos = async () => {
+  //   try {
 
-      const completedTodos = response.data.completedTodos || [];
-      setTodos(completedTodos);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-  useEffect(() => {
-    fetchCompletedTodos();
-  }, [selectedDate]);
-  console.log(todos);
-  const handleDayPress = (day) => {
-    setSelectedDate(day.dateString)
-  }
+  //     const userId = await AsyncStorage.getItem("UserId")
+  //     const response = await axios.get(`http://192.168.100.20:3000/todos/completed/${selectedDate}/${userId}`);
+
+  //     const completedTodos = response.data.completedTodos || [];
+  //     console.log("completeTodos : ", completedTodos);
+  //     setTodos(completedTodos);
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
+  
+  // useEffect(() => {
+  //   fetchCompletedTodos();
+  // }, [selectedDate]);
+  // console.log(todos);
+  // const handleDayPress = (day) => {
+  //   setSelectedDate(day.dateString)
+  // }
   return (
     <View style={{flex:1, backgroundColor:"white"}}>
       <Calendar
-        onDayPress={handleDayPress}
+        // onDayPress={handleDayPress}
         markedDates={{
           [selectedDate]:{selected:true, selectedColor: "#7CB9E8"}
         }}

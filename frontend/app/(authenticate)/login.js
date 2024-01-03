@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   TextInput,
   Pressable,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -37,15 +38,19 @@ const login = () => {
       password: password,
     };
 
-    axios.post('http://192.168.1.13:3000/login', user)
+    axios.post('https://agendaku-api.vercel.app/login', user)
       .then((response) => {
         const token = response.data.token;
-        console.log("token", token)
+        const userId = response.data.userId;
+        console.log("id : ", userId);
+        console.log("token", token);
         AsyncStorage.setItem("authToken", token);
+        AsyncStorage.setItem("UserId", userId);
         router.replace("/(tabs)/home");
       })
       .catch((error) => {
         console.log("error", error);
+        Alert.alert("Invalid","Email or Password Wrong!!!");
       });
 
   };
