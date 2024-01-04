@@ -70,7 +70,7 @@ const index = () => {
         return;
         }
 
-        const response = await axios.post(`http://192.168.100.20:3000/todos/${userId}`, todoData);
+        const response = await axios.post(`https://agendaku-api.vercel.app/todos/${userId}`, todoData);
 
         console.log("Todo added successfully:", response.data);
 
@@ -107,7 +107,7 @@ const index = () => {
     const markTodoAsCompleted = async (todoId) => {
         try {
         setMarked(true);
-        const response = await axios.patch(`http://192.168.100.20:3000/todos/${todoId}/complete`);
+        const response = await axios.patch(`https://agendaku-api.vercel.app/todos/${todoId}/complete`);
         console.log(response.data);
         } catch (error) {
         console.log("error", error);
